@@ -1,1 +1,1 @@
-# AliExpress-WebScrape-Hackathon
+# Jumia-Ecommerce-WebScrape-Hackathon
