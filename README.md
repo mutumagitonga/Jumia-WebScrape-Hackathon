@@ -1,1 +1,0 @@
-# Jumia-Ecommerce-WebScrape-Hackathon
