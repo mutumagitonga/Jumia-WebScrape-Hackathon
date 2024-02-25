@@ -79,3 +79,135 @@ Once done with the project work, the virtual environment can be deactivated by r
 
 
     
+## Data
+### Source Data
+
+
+
+### Data Acquisition 
+
+Raw data is acquired via web scraping. The target website is a popular Kenyan online retailer Jumia. 
+
+**NB:** The following data acquisition procedure is explained as exhaustively as possible to allow quick replication of the process. However, if any problems are encountered, run the cells in the jupyter notebook `notebooks/1_jumia_webscrape.ipynb` consecutively for clarification.  
+
+Therefore, the first step is visiting the root url of the website, `https://www.jumia.co.ke/` and exploring further to discover the location of the products' endpoint. 
+
+Keen exploration reveals that the endpoint of interest is `https://www.jumia.co.ke/all-products/`. However, a query string, `?page=`, is appended to this endpoint to make the scraping practical (so that its done pagewise). 
+
+Thus, the url becomes `https://www.jumia.co.ke/all-products/?page=`. So one uses the navigation tabs at the bottom of the page to discover the last page, in this case the total page count is found to be 50.   
+
+Now the scraping technique involves employing a for-loop within which page numbers are appended at the end of the query string consecutively. An IF-condition check is done to ensure the scraping is only done when the products are absent (to prevent repeat scraping).  
+```python
+# Declare the products’ url & the total webpage count
+other_pages_url = "https://www.jumia.co.ke/all-products/?page="
+webpage_num_total = 50
+
+# If scraped products csv doesn't exist, run the scraper function below & save products to csv ELSE continue & read csv
+if not os.path.exists('../data/raw/all_products_list_raw.csv'):
+    for page in range(1, webpage_num_total+1, 1):
+        other_pages_url = "https://www.jumia.co.ke/all-products/?page="
+        page = str(page)
+        other_pages_url = other_pages_url + page
+        # Fetching HTML data
+        response = fetch_html_data(other_pages_url)
+        # Converting to soup object
+        soup = convert_web_data_to_beautiful_soup_obj(response)
+        # Appending each product dictionary to all_products list
+        append_one_product_details_dictionary_to_list(page)
+    
+    # Convert scraped list to dataframe
+    df = pd.DataFrame(all_products_list)
+    # Save scraped dataframe to csv to prevent scraping each time I run the notebook
+    df.to_csv('../data/raw/all_products_list_raw.csv')
+```
+**NB:** The last 2 lines of the code snippet above run after all the product pages have been scraped. The 2nd last line creates a pandas dataframe from the list of products' data attributes dictionaries while the last line saves the dataframe as a csv. The csv file is saved once to store the scraped data thus preventing the scraper from re-running each time the entire notebook is run.  
+
+For each page, the url is passed to a function fetching the html data which is called `fetch_html_data` in the previous code snippet. The `fetch_html_data` is expounded below:
+```python
+def fetch_html_data(web_address):
+    try:
+        # print(f"\nFetching data from {web_address}...")
+        res = req.get(web_address)
+        return res
+    except req.exceptions.RequestException as e:
+        print('Stopped:', e)
+    except TypeError as e:
+        print('Stopped:', e)
+```
+
+The HTML data response is then passed into a function that converts it into a beautiful soup object. The `convert_web_data_to_beautiful_soup_obj` function code is shown below:
+```python
+def convert_web_data_to_beautiful_soup_obj(web_data):
+    try:
+        # print("Creating BeautifulSoup object...")
+        soup_obj = BeautifulSoup(web_data.text, "html.parser")
+        # print("Success! Object created!")
+        return soup_obj
+    except Exception as e:
+        print("Stopped:", e)
+```
+
+The page's beautiful soup object is then passed into another function in which the appropriate HTML element selects all products in the page and loads them into a list. 
+
+Looping through all the page's products list, the required data attributes are scraped from each product and are loaded into a dictionary. 
+Below is the `append_one_product_details_dictionary_to_list` function:
+```python
+all_products_list = []
+
+def append_one_product_details_dictionary_to_list(pg):
+    # print(f"Appending page {pg} products' details to array")
+    
+    page_products_details_soup = soup.find_all("article", class_="prd _fb col c-prd")
+    
+    for detail in page_products_details_soup:
+        details_dict = {"name": detail.find("h3", class_="name").text.strip(),
+                        "new_price": detail.find("div", class_="prc").text.strip(),
+                        "old_price": detail.find("div", class_="old").text.strip() if detail.find("div", class_="old") else None,
+                        "discount": detail.find("div", class_="bdg _dsct _sm").text.strip() if detail.find("div", class_="bdg _dsct _sm") else None,
+                        "rating": detail.find("div", class_="stars _s").text.strip() if detail.find("div", class_="stars _s") else None,
+                        "votes": detail.find("div", class_="rev").text.strip() if detail.find("div", class_="rev") else None}
+        all_products_list.append(details_dict)
+
+```  
+
+Each dictionary containing a product's details is then appended into a master list in the last line: `all_products_list.append(details_dict)` (in the code snippet above). The `all_products_list` (will/shall) contain the dictionaries of all the products, starting from the first page products through to the last page products. 
+
+Remember after the for-loop is completed, the list of dictionaries are converted into a dataframe & then stored as a csv as previously discussed.  
+
+
+### Data Preprocessing
+Acquired data is not always squeaky clean, so preprocessing them are an integral part of any data analysis. In this section you can talk about the same.
+
+The attributes of the raw acquired data acquired may require cleaning before the data analysis process. 
+
+Firstly, read the csv file that was stored earlier to get a pandas dataframe:
+```python
+# Read csv and specify index column to prevent creation of another redundant index
+products_df = pd.read_csv('../data/raw/all_products_list_raw.csv', index_col=0)  # Read products list from csv
+```
+Secondly, check the summary info of the data attributes as shown below:
+```python
+products_df.info()
+```
+The info summary of the data attributes obtained via `products_df.info()` is as below: 
+```python
+<class 'pandas.core.frame.DataFrame'>
+Index: 2000 entries, 0 to 1999
+Data columns (total 6 columns):
+ #   Column     Non-Null Count  Dtype 
+---  ------     --------------  ----- 
+ 0   name       2000 non-null   object
+ 1   new_price  2000 non-null   object
+ 2   old_price  1907 non-null   object
+ 3   discount   1907 non-null   object
+ 4   rating     109 non-null    object
+ 5   votes      109 non-null    object
+dtypes: object(6)
+memory usage: 109.4+ KB
+```
+The summary above indicates the necessity for preprocessing the data. Although the data has 2000 rows, it's clear that some rows have a high count of null values i.e., rating and votes while old_price and discount have a small count of the same. 
+
+Another point of concern is that all columns have the object/string data type yet we know that's not the ideal scenario. More specifically, all columns save for name should be numeric. 
+
+Therefore, the two fundamental areas of concern in the preprocessing stage are imputation (replacing missing values), and changing the data types to assume an ideal status. However, there may be other minor points of concern that might require attention during the cleaning process - so an open mind is key to the process. 
+
