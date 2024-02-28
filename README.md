@@ -213,7 +213,7 @@ Another point of concern is that all columns have the object/string data type ye
 
 Therefore, the two fundamental areas of concern in the preprocessing stage are imputation (replacing missing values), and changing the column data types to their ideal types. However, there may be other minor points of concern that might require attention during the cleaning process - so an open mind is key to the process. 
 
-#### Cleaning columns before changing their data types & imputing null values
+#### Cleaning all relevant columns before imputing any null values
 1) Cleaning the ***new_price*** column:
 
 From the summary, the *new_price* column has no null values since it has a non-null count of 2000 while the dataframe has 2000 rows. 
@@ -241,7 +241,8 @@ Checking the datatype of this column using `print(products_df['new_price'].dtype
 products_df.to_csv("../data/processed/1_all_products_new_price_cleaned.csv")
 ```
 
-2. Cleaning the ***old_price*** column:
+2) Cleaning the ***old_price*** column:
+
 From the dataframe summary above, this attribute has only 93 null values (1907 non-null value count against a total count of 2000 rows).
 
 - Firstly, create a dataframe from the csv created in preprocessing stage 1:
@@ -278,12 +279,13 @@ A confirmation with `print(products_df['old_price'].dtype)` returns `float64`. H
 # Saving stage two data (old_price column) cleaning dataframe to csv
 products_df.to_csv("../data/processed/2_all_products_old_price_cleaned.csv")
 ```
-3. Cleaning the ***discount*** column:
+3) Cleaning the ***discount*** column:
+
 From the dataframe summary info, the *discount* column has a similar number of null values as the *old_price* column - 93 nulls (1907 non-nulls vs 2000 counts). 
 
 - Read the csv file saved in the previous preprocessing/cleaning step to obtain a dataframe:
 ```python
-# Read csv file from stage 2 (old_price column cleanup) & convert to dataframe
+# Read csv file from stage 2 (old_price column cleanup) to get dataframe
 products_df = pd.read_csv("../data/processed/2_all_products_old_price_cleaned.csv", index_col=0)
 ```
 - Check for unique values to inform the cleaning steps to take: 
@@ -311,3 +313,38 @@ The percentages are converted to floats with a hundredths place value to ensure 
 products_df.to_csv("../data/processed/3_all_products_discount_cleaned.csv")
 ```
 
+4) Cleaning the ***rating*** column:
+
+From the summary info above, the rating column has a significant fraction of null values (109 non-null values vs 2000 rows, hence approx. 1891 nulls).
+
+- The first step is reading csv file created at the end of stage 3 data cleaning to create a dataframe:
+```python
+# Read file cleaned in prior stage (discount column) to get dataframe
+products_df = pd.read_csv("../data/processed/3_all_products_discount_cleaned.csv", index_col=0)
+```
+- Now check for unique values in that column: 
+```python
+# Check for unique values first
+products_df['rating'].unique()[:10]
+```
+When unique values in the column are sought using the command above, the patterns appearing uniquely are `4.3 out of 5` and nulls. 
+
+- Now beginning the cleanup, the rating string with a format `4.3 out of 5` is split at the spaces into 4 elements with the first element (which holds the actual rating) being preserved. The condition for the split and selection is that the value should not be null and should be a string: 
+```python
+# Split rating string values into 4 elements and select the first element unless its None(left as is)
+products_df['rating'] = products_df['rating'].apply(lambda x: x.split(' ')[0] if x is not None and isinstance(x,str) else x)
+```
+- Next, the non-null values in the rating column are converted into float: 
+```python
+# Convert the values into float
+products_df['rating'] = products_df['rating'].apply(lambda x: float(x) if x is not None else x)
+``` 
+The string to float conversion is successful since `print(products_df['rating'].dtype)` shows that the column data type is now `float64`. 
+
+- Now this stage's cleaned dataframe is saved into a csv file: 
+```python
+# Saving stage four data cleaning file to csv
+products_df.to_csv("../data/processed/4_all_products_rating_cleaned.csv")
+```
+
+5) Cleaning the ***votes*** column: 
