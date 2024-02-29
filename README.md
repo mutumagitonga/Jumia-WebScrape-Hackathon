@@ -176,7 +176,6 @@ Remember after the for-loop is completed, the list of dictionaries are converted
 
 
 ### Data Preprocessing
-Acquired data is not always squeaky clean, so preprocessing them are an integral part of any data analysis. In this section you can talk about the same.
 
 The attributes of the raw acquired data acquired may require cleaning before the data analysis process. 
 
@@ -214,7 +213,7 @@ Another point of concern is that all columns have the object/string data type ye
 Therefore, the two fundamental areas of concern in the preprocessing stage are imputation (replacing missing values), and changing the column data types to their ideal types. However, there may be other minor points of concern that might require attention during the cleaning process - so an open mind is key to the process. 
 
 #### Cleaning all relevant columns before imputing any null values
-1) Cleaning the ***new_price*** column:
+1) **Cleaning the ***new_price*** column**:
 
 From the summary, the *new_price* column has no null values since it has a non-null count of 2000 while the dataframe has 2000 rows. 
 
@@ -241,7 +240,7 @@ Checking the datatype of this column using `print(products_df['new_price'].dtype
 products_df.to_csv("../data/processed/1_all_products_new_price_cleaned.csv")
 ```
 
-2) Cleaning the ***old_price*** column:
+2) **Cleaning the ***old_price*** column**:
 
 From the dataframe summary above, this attribute has only 93 null values (1907 non-null value count against a total count of 2000 rows).
 
@@ -279,7 +278,7 @@ A confirmation with `print(products_df['old_price'].dtype)` returns `float64`. H
 # Saving stage two data (old_price column) cleaning dataframe to csv
 products_df.to_csv("../data/processed/2_all_products_old_price_cleaned.csv")
 ```
-3) Cleaning the ***discount*** column:
+3) **Cleaning the ***discount*** column**:
 
 From the dataframe summary info, the *discount* column has a similar number of null values as the *old_price* column - 93 nulls (1907 non-nulls vs 2000 counts). 
 
@@ -313,7 +312,7 @@ The percentages are converted to floats with a hundredths place value to ensure 
 products_df.to_csv("../data/processed/3_all_products_discount_cleaned.csv")
 ```
 
-4) Cleaning the ***rating*** column:
+4) **Cleaning the ***rating*** column**:
 
 From the summary info above, the rating column has a significant fraction of null values (109 non-null values vs 2000 rows, hence approx. 1891 nulls).
 
@@ -327,7 +326,7 @@ products_df = pd.read_csv("../data/processed/3_all_products_discount_cleaned.csv
 # Check for unique values first
 products_df['rating'].unique()[:10]
 ```
-When unique values in the column are sought using the command above, the patterns appearing uniquely are `4.3 out of 5` and nulls. 
+When unique values in the column are sought using the command above, the pattern appearing uniquely is `4.3 out of 5`. However, it's important to remember that nulls still exist although they don't appear in this list. 
 
 - Now beginning the cleanup, the rating string with a format `4.3 out of 5` is split at the spaces into 4 elements with the first element (which holds the actual rating) being preserved. The condition for the split and selection is that the value should not be null and should be a string: 
 ```python
@@ -347,4 +346,28 @@ The string to float conversion is successful since `print(products_df['rating'].
 products_df.to_csv("../data/processed/4_all_products_rating_cleaned.csv")
 ```
 
-5) Cleaning the ***votes*** column: 
+5) **Cleaning the ***votes*** column**: 
+The *votes* column has a similar number of non-null values as the rating column since they are tied together. A vote is what creates a rating. The high number of null values (1891) in this column shall be imputed in the coming preprocessing/cleaning stages as is the case with nulls in the other columns. 
+
+- First step is creating a dataframe from the saved csv file in the previous data cleaning stage: 
+```python
+# Read csv file saved in prior cleaning stage (rating column) to obtain dataframe
+products_df = pd.read_csv("../data/processed/4_all_products_rating_cleaned.csv", index_col=0)
+```
+- Check the unique values in the column: 
+```python
+# Explore unique values
+products_df['votes'].unique()[:10]
+```
+The results show a pattern such as this `4.7 out of 5(636)`. As in rating column cleaning, it's critical to recollect that nulls still exist in the column even if not part of this list. 
+
+- Now split the value at the left bracket and again at the right bracket and select the votes value in between. The condition this split & select operation is that row should be non-null and should be a string. After selecting the votes string value, it's then converted to a float: 
+```python
+# Extract the votes count with string manipulation methods & convert values to floats
+products_df['votes'] = products_df['votes'].apply(lambda x: float(x.split('(')[1].split(')')[0]) if x is not None and isinstance(x,str) else x)
+```
+- Save the dataframe cleaned to this juncture into a csv file: 
+```python
+# Saving stage five data cleaning file to csv
+products_df.to_csv("../data/processed/5_all_products_votes_cleaned.csv")
+```
