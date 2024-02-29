@@ -371,3 +371,89 @@ products_df['votes'] = products_df['votes'].apply(lambda x: float(x.split('(')[1
 # Saving stage five data cleaning file to csv
 products_df.to_csv("../data/processed/5_all_products_votes_cleaned.csv")
 ```
+
+6) **Imputing NULL values in the different columns**:
+
+- First, get dataframe from the stage 5 cleaning: 
+```python
+# Read csv file from prior cleaning (votes column) to get dataframe
+products_df = pd.read_csv("../data/processed/5_all_products_votes_cleaned.csv", index_col=0)
+```
+- Check all the nulls in the various columns:
+```python
+print(f"new_price nulls: {products_df.new_price.isnull().sum()}")
+print(f"old_price nulls: {products_df.old_price.isnull().sum()}")
+print(f"discount nulls: {products_df.discount.isnull().sum()}")
+print(f"rating nulls: {products_df.rating.isnull().sum()}")
+print(f"votes nulls: {products_df.votes.isnull().sum()}")
+```
+Running the above returns the values: 
+`new_price nulls: 0
+old_price nulls: 93
+discount nulls: 93
+rating nulls: 1891
+votes nulls: 1891` respectively. So the next step is to start filling out the nulls.
+
+- **Filling null values in *discount* column.**:
+```python
+# Use discount column average to fill nulls
+products_df['discount'] = products_df['discount'].fillna(round(products_df['discount'].mean(), 2))
+```
+Running `products_df.discount.isnull().sum()` now returns 0 showing no null values present. 
+
+**NB:** The null values in the discount column are imputed first since the column's average shall be used in imputing the nulls in the old_price column.
+
+- **Filling null values in *old_price* column based on the product of the adjacent new_price value and the discount column average**:
+Remember that the new_price column has no nulls hence it's applied in this imputation without further cleaning. 
+```python
+def multiply_fill_old_price_column_nulls(row):
+    new_price = row['new_price']
+    discount_column_mean = round(products_df['discount'].mean(), 2)
+    
+    if not pd.isna(row['old_price']):
+        return row['old_price']
+    return new_price * discount_column_mean
+        
+products_df['old_price'] = products_df.apply(multiply_fill_old_price_column_nulls, axis=1)
+
+```
+Running `products_df.old_price.isnull().sum()` returns 0 showing that the imputation is successful. 
+
+- **Filling null values in *rating* column with mean/average of this same *rating* column:**
+```python
+products_df['rating'] = products_df['rating'].fillna(round(products_df['rating'].mean(), 2))
+```
+After the imputation above, checking null values with `products_df.rating.isnull().sum()` returns 0.
+
+- **Filling null values in *votes* column with average of this same *votes* column:**
+```python
+products_df['votes'] = products_df['votes'].fillna(round(products_df['votes'].mean(), 2))
+```
+Again, running `products_df.votes.isnull().sum()` confirms 0 null values. 
+
+With that, the data preprocessing is complete. This can be confirmed by running `products_df.info()` which returns the summary info below: 
+```python
+<class 'pandas.core.frame.DataFrame'>
+Index: 2000 entries, 0 to 1999
+Data columns (total 6 columns):
+ #   Column     Non-Null Count  Dtype  
+---  ------     --------------  -----  
+ 0   name       2000 non-null   object 
+ 1   new_price  2000 non-null   float64
+ 2   old_price  2000 non-null   float64
+ 3   discount   2000 non-null   float64
+ 4   rating     2000 non-null   float64
+ 5   votes      2000 non-null   float64
+dtypes: float64(5), object(1)
+memory usage: 109.4+ KB
+```
+- With all the columns cleaned, the dataframe is saved into a final preprocessed data csv: 
+```python
+# Saving stage 6 (null values imputation) data file to csv
+products_df.to_csv("../data/final/6_all_products_all_columns_cleaned.csv")
+```
+- Finally, the cleaned dataframe is assigned a new name, `products_clean_df` to denote a cleaned dataframe: 
+```python
+# Read csv of the final data into dataframe
+products_clean_df = pd.read_csv("../data/final/6_all_products_all_columns_cleaned.csv", index_col=0)
+```
