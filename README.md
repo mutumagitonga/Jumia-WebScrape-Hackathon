@@ -404,6 +404,7 @@ Running `products_df.discount.isnull().sum()` now returns 0 showing no null valu
 **NB:** The null values in the discount column are imputed first since the column's average shall be used in imputing the nulls in the old_price column.
 
 - **Filling null values in *old_price* column based on the product of the adjacent new_price value and the discount column average**:
+
 Remember that the new_price column has no nulls hence it's applied in this imputation without further cleaning. 
 ```python
 def multiply_fill_old_price_column_nulls(row):
