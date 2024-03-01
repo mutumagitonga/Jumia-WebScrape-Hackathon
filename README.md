@@ -81,7 +81,9 @@ Once done with the project work, the virtual environment can be deactivated by r
     
 ## Data
 ### Source Data
+The source data in this project was a webscrape of various products available on the Jumia website available progressively pagewise via this [link](https://www.jumia.co.ke/all-products/?page=1) from the 1st to the last page. 
 
+Visiting the link above reveals that every product has 5 critical features - name, old price, new price, discount, rating, and votes. These 5 features constitute the data attributes of the dataframe.
 
 
 ### Data Acquisition 
@@ -404,7 +406,6 @@ Running `products_df.discount.isnull().sum()` now returns 0 showing no null valu
 **NB:** The null values in the discount column are imputed first since the column's average shall be used in imputing the nulls in the old_price column.
 
 - **Filling null values in *old_price* column based on the product of the adjacent new_price value and the discount column average**:
-
 Remember that the new_price column has no nulls hence it's applied in this imputation without further cleaning. 
 ```python
 def multiply_fill_old_price_column_nulls(row):
