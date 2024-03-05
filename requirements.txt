@@ -6,3 +6,4 @@ matplotlib
 seaborn
 jupyter
 google-generativeai
+python-dotenv
