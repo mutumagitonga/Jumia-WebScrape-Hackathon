@@ -1,10 +1,17 @@
-import openai
+import os
+from openai import OpenAI
+from dotenv import load_dotenv
 
-# Define my OpenAI API key
-openai.api_key = 'MY_API_KEY'
+# Load the .env using the dotenv(python-dotenv) package
+load_dotenv()
+
+# Initialize OpenAI client and read the api key from the .env
+client = OpenAI(
+    api_key=os.environ.get("OPENAI_API_KEY")
+)
 
 
-def predict_product_category(product_name):
+def predict_product_category(name_of_product):
     # Define the prompt with product category constraints (as categorized on jumia.co.ke)
     prompt = """
     Given a product name, predict the product category from the following options:
@@ -24,17 +31,10 @@ def predict_product_category(product_name):
     - Industrial & Scientific
 
     Product Name: "{}"
-    """.format(product_name)
+    """.format(name_of_product)
 
     # Invoke the OpenAI API
-    response = openai.Completion.create(
-        engine="text-davinci-003",  # GPT-3.5 model
-        prompt=prompt,
-        temperature=0.5,  # Randomness of output (Higher: More adventurous, Lower: More cautious)
-        max_tokens=100  # Response length
-    )
 
-    # Extract the predicted category from the response
-    predicted_product_category = response.choices[0].text.strip()
 
-    print("Predicted category:", predicted_product_category)
+product_name = "NIVEA Radiant & Beauty Advanced Care Lotion"
+predict_product_category(product_name)

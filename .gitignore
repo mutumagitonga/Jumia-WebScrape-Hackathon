@@ -1,4 +1,3 @@
 venv/
 .idea/
-scripts/config.ini
 .env
