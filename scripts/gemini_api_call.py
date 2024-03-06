@@ -45,8 +45,6 @@ def predict_product_category(name_of_product):
 
     convo = model.start_chat(history=[])  # Start chat
     convo.send_message(prompt)  # Send the prompt
-    print(convo.last.text)  # Extract the text
+    # print(convo.last.text)  # Extract the text
+    return convo.last.text  # Return AI response
 
-
-product_name = "Vitron HTC4388FS - 43\" Smart  Android Frameles"
-predict_product_category(product_name)
