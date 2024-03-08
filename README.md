@@ -452,10 +452,10 @@ memory usage: 109.4+ KB
 - With all the columns cleaned, the dataframe is saved into a final preprocessed data csv: 
 ```python
 # Saving stage 6 (null values imputation) data file to csv
-products_df.to_csv("../data/final/6_all_products_all_columns_cleaned.csv")
+products_df.to_csv("../data/processed/6_all_products_all_columns_cleaned.csv")
 ```
 - Finally, the cleaned dataframe is assigned a new name, `products_clean_df` to denote a cleaned dataframe: 
 ```python
 # Read csv of the final data into dataframe
-products_clean_df = pd.read_csv("../data/final/6_all_products_all_columns_cleaned.csv", index_col=0)
+products_clean_df = pd.read_csv("../data/processed/6_all_products_all_columns_cleaned.csv", index_col=0)
 ```
