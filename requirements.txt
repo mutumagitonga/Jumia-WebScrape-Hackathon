@@ -2,6 +2,7 @@ requests
 bs4
 pandas
 numpy
+anthropic
 matplotlib
 seaborn
 jupyter
