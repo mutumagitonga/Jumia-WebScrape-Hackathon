@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 # Define function to fetch website html data
 def fetch_html_data(web_address):
     try:
-        # print(f"\nFetching data from {web_address}...")
+        print(f"Fetching data from {web_address}...")
         res = req.get(web_address)
         return res
     except req.exceptions.RequestException as e:
