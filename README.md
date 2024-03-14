@@ -446,15 +446,19 @@ products_df['old_price'] = products_df.apply(multiply_fill_old_price_column_null
 ```
 Running `products_df.old_price.isnull().sum()` returns 0 showing that the imputation is successful. 
 
-- **Filling null values in *rating* column with mean/average of this same *rating* column:**
+- **Filling null values in *rating* column with value zero(0):**
+
+Nulls in the rating column are filled with 0 to reflect the true customer sentiment during the data analysis process. 
 ```python
-products_df['rating'] = products_df['rating'].fillna(round(products_df['rating'].mean(), 2))
+products_df['rating'] = products_df['rating'].fillna(0)
 ```
 After the imputation above, checking null values with `products_df.rating.isnull().sum()` returns 0.
 
-- **Filling null values in *votes* column with average of this same *votes* column:**
+- **Filling null values in *votes* column with value 0:**
+
+Nulls in the rating column are filled with 0 to reflect the true customer taste especially during data analysis.
 ```python
-products_df['votes'] = products_df['votes'].fillna(round(products_df['votes'].mean(), 2))
+products_df['votes'] = products_df['votes'].fillna(0)
 ```
 Again, running `products_df.votes.isnull().sum()` confirms 0 null values. 
 
