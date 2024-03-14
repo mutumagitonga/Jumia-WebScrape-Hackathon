@@ -373,6 +373,7 @@ products_df.to_csv("../data/processed/4_all_products_rating_cleaned.csv")
 ```
 
 5) **Cleaning the ***votes*** column**: 
+
 The *votes* column has a similar number of non-null values as the rating column since they are tied together. A vote is what creates a rating. The high number of null values (1891) in this column shall be imputed in the coming preprocessing/cleaning stages as is the case with nulls in the other columns. 
 
 - First step is creating a dataframe from the saved csv file in the previous data cleaning stage: 
