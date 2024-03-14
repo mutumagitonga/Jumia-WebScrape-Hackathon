@@ -609,7 +609,7 @@ However, once the process is successful, the dataframe is saved into a CSV to en
 # Read csv where all columns are cleaned before fetching product categories for all 2000 product names
 products_df = pd.read_csv("../data/processed/6_all_products_all_columns_cleaned.csv", index_col=0)
 ```
-After reading the dataframe, its product names are applied in generating product categories for the `product_df`:
+After reading the dataframe, its product names are applied in generating product categories for the `products_df`:
 ```python
 # Reload the gemini api call module, 'gemini_call', to refresh/reload it before use to prevent any unusual errors
 importlib.reload(gemini_call)
