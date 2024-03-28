@@ -373,7 +373,6 @@ products_df.to_csv("../data/processed/4_all_products_rating_cleaned.csv")
 ```
 
 5) **Cleaning the ***votes*** column**: 
-
 The *votes* column has a similar number of non-null values as the rating column since they are tied together. A vote is what creates a rating. The high number of null values (1891) in this column shall be imputed in the coming preprocessing/cleaning stages as is the case with nulls in the other columns. 
 
 - First step is creating a dataframe from the saved csv file in the previous data cleaning stage: 
@@ -446,19 +445,15 @@ products_df['old_price'] = products_df.apply(multiply_fill_old_price_column_null
 ```
 Running `products_df.old_price.isnull().sum()` returns 0 showing that the imputation is successful. 
 
-- **Filling null values in *rating* column with value zero(0):**
-
-Nulls in the rating column are filled with 0 to reflect the true customer sentiment during the data analysis process. 
+- **Filling null values in *rating* column with mean/average of this same *rating* column:**
 ```python
-products_df['rating'] = products_df['rating'].fillna(0)
+products_df['rating'] = products_df['rating'].fillna(round(products_df['rating'].mean(), 2))
 ```
 After the imputation above, checking null values with `products_df.rating.isnull().sum()` returns 0.
 
-- **Filling null values in *votes* column with value 0:**
-
-Nulls in the rating column are filled with 0 to reflect the true customer taste especially during data analysis.
+- **Filling null values in *votes* column with average of this same *votes* column:**
 ```python
-products_df['votes'] = products_df['votes'].fillna(0)
+products_df['votes'] = products_df['votes'].fillna(round(products_df['votes'].mean(), 2))
 ```
 Again, running `products_df.votes.isnull().sum()` confirms 0 null values. 
 
@@ -614,7 +609,7 @@ However, once the process is successful, the dataframe is saved into a CSV to en
 # Read csv where all columns are cleaned before fetching product categories for all 2000 product names
 products_df = pd.read_csv("../data/processed/6_all_products_all_columns_cleaned.csv", index_col=0)
 ```
-After reading the dataframe, its product names are applied in generating product categories for the `products_df`:
+After reading the dataframe, its product names are applied in generating product categories for the `product_df`:
 ```python
 # Reload the gemini api call module, 'gemini_call', to refresh/reload it before use to prevent any unusual errors
 importlib.reload(gemini_call)
@@ -683,3 +678,41 @@ products_df.to_csv("../data/final/products_df_all_cleaned.csv")
 products_clean_df = pd.read_csv("../data/final/products_df_all_cleaned.csv", index_col=0)
 products_clean_df.head()
 ```
+
+## Code Structure
+Explain the code structure and how it is organized, including any significant files and their purposes. This will help others understand how to navigate your project and find specific components.
+
+I have organized my code repository as seen in the skeleton below. 
+
+
+Jumia Webscrape Hackathon
+├── data
+│   ├── data
+│   |     ├── data1.csv
+│   ├── data
+│   |       ├── data1.csv
+│   |       ├── data1.csv
+│   ├── data
+│   |       ├── data1.csv
+│   |       ├── data1.csv
+│── cleanedData
+│       ├── cleaneddata1.csv
+|       └── cleaneddata2.csv
+├── results
+│   ├── data
+│   |     ├── data1.csv
+│   ├── data
+│   |       ├── data1.csv
+│   |       ├── data1.csv
+│   ├── data
+│   |       ├── data1.csv
+│   |       ├── data1.csv
+├── data_analysis.ipynb
+├── data_modelling.ipynb
+├── Img
+│   ├── img1.png
+│   └── Headerheader.jpg
+├── LICENSE
+├── README.md
+└── .gitignore
+
