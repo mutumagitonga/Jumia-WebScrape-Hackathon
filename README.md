@@ -685,34 +685,31 @@ Explain the code structure and how it is organized, including any significant fi
 I have organized my code repository as seen in the skeleton below. 
 
 
-Jumia Webscrape Hackathon
+Jumia Webscrape
 ├── data
-│   ├── data
-│   |     ├── data1.csv
-│   ├── data
-│   |       ├── data1.csv
-│   |       ├── data1.csv
-│   ├── data
-│   |       ├── data1.csv
-│   |       ├── data1.csv
-│── cleanedData
-│       ├── cleaneddata1.csv
-|       └── cleaneddata2.csv
+│   ├── final
+│   |     ├── final_data.csv
+│   ├── preprocessed
+│   |       ├── preprocessed1.csv
+│   |       └── preprocessed2.csv
+│   └── raw
+│         └── raw_scraped_data.csv
+│── notebooks
+│       ├── 1_jumia_webscrape.ipynb
 ├── results
-│   ├── data
-│   |     ├── data1.csv
-│   ├── data
-│   |       ├── data1.csv
-│   |       ├── data1.csv
-│   ├── data
-│   |       ├── data1.csv
-│   |       ├── data1.csv
-├── data_analysis.ipynb
-├── data_modelling.ipynb
-├── Img
-│   ├── img1.png
-│   └── Headerheader.jpg
-├── LICENSE
+│       ├── datafiles
+│       |     ├── final_data.csv
+|       └── plots
+│             ├── 1_popular_brands.png
+|             └── 2_most_satisfying_products_per_category.png
+|             └── 3_least_satisfying_products_per_category.png
+│── scripts
+│       ├── __init__.py
+|       └── gemini_api_call.py
+|       └── most_satisfying_product.py
+|       └── scraper.py
+├── requirements.txt
 ├── README.md
 └── .gitignore
-
+        ├── venv
+        └── .env 
