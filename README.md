@@ -684,7 +684,7 @@ Explain the code structure and how it is organized, including any significant fi
 
 I have organized my code repository as seen in the skeleton below. 
 
-
+```python
 Jumia Webscrape
 ├── data
 │   ├── final
@@ -713,3 +713,4 @@ Jumia Webscrape
 └── .gitignore
         ├── venv
         └── .env 
+
