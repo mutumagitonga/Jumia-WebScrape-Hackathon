@@ -706,7 +706,7 @@ Jumia Webscrape
 │── scripts
 │       ├── __init__.py
 |       └── gemini_api_call.py
-|       └── most_satisfying_product.py
+|       └── claude_api_call.py
 |       └── scraper.py
 ├── requirements.txt
 ├── README.md
