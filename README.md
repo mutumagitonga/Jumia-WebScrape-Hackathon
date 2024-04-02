@@ -41,12 +41,16 @@ NB: Ensure you have Python 3.3 or above installed.
 
 If Python is not installed, [click here](https://tinyurl.com/43k9evvv) for installation instructions for any of the 3 platforms. 
 
-### Installation Step 3 - Install the virtual environment
-Once that's cleared, install a virtual python environment within the cloned project folder:
+### Installation Step 3 - Create the virtual environment
+Before, creation of the virtual environment in a system with python3, ensure that the package below is installed: 
+```bash
+  sudo apt install python3.10-venv
+```
+Once that's cleared, create a virtual python environment within the cloned project folder:
 ```bash
   sudo python3 -m venv my_env
 ```
-Or in older python installations: 
+Or in older python installations, ensure the that `virtualenv` is installed using `sudo apt install virtualenv`: 
 ```bash
   sudo virtualenv my_env
 ```
