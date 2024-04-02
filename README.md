@@ -44,8 +44,13 @@ If Python is not installed, [click here](https://tinyurl.com/43k9evvv) for insta
 ### Installation Step 3 - Install the virtual environment
 Once that's cleared, install a virtual python environment within the cloned project folder:
 ```bash
-  python3 -m venv my_env
+  sudo python3 -m venv my_env
 ```
+Or in older python installations: 
+```bash
+  sudo virtualenv my_env
+```
+The sudo command unblocks any permission restrictions that may prevent creation of `activate` script in the `my_env\bin\` folder. 
 In the above codeline, you can replace `my_env` with a name of your own for the virtual environment. 
 
 **Purpose of virtual environment:** Isolates a project's dependencies (to be installed) from other projects and the system-wide Python installation. In other words, it contains:  
