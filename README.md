@@ -44,15 +44,15 @@ If Python is not installed, [click here](https://tinyurl.com/43k9evvv) for insta
 ### Installation Step 3 - Create the virtual environment
 Before, creation of the virtual environment in a system with python3, ensure that the package below is installed: 
 ```bash
-  sudo apt install python3.10-venv
+  apt install python3.10-venv
 ```
 Once that's cleared, create a virtual python environment within the cloned project folder:
 ```bash
-  sudo python3 -m venv my_env
+  python3 -m venv my_env
 ```
-Or in older python installations, ensure the that `virtualenv` is installed using `sudo apt install virtualenv`: 
+Or in older python installations, ensure the that `virtualenv` is installed using `apt install virtualenv`: 
 ```bash
-  sudo virtualenv my_env
+  virtualenv my_env
 ```
 The sudo command unblocks any permission restrictions that may prevent creation of `activate` script in the `my_env\bin\` folder. 
 In the above codelines, replace `my_env` virtual environment name with a different one if need be. 
