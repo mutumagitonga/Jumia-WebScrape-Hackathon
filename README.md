@@ -51,7 +51,7 @@ Or in older python installations:
   sudo virtualenv my_env
 ```
 The sudo command unblocks any permission restrictions that may prevent creation of `activate` script in the `my_env\bin\` folder. 
-In the above codeline, you can replace `my_env` with a name of your own for the virtual environment. 
+In the above codelines, replace `my_env` virtual environment name with a different one if need be. 
 
 **Purpose of virtual environment:** Isolates a project's dependencies (to be installed) from other projects and the system-wide Python installation. In other words, it contains:  
 - A Python interpreter.
