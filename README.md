@@ -57,7 +57,7 @@ In the above codeline, you can replace `my_env` with a name of your own for the 
 
 On Windows: `my_env\Scripts\activate`
 
-On MacOS/Linux: `source venv/bin/activate`
+On MacOS/Linux: `source my_env/bin/activate`
 
 Once activated, the terminal path indicator changes indicating the virtual environment is now active. 
 
